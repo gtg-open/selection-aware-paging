@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <PackageId>GtG.Open.HC.SelectionAwarePaging</PackageId>
+    <Description>Selection-aware offset paging for Hot Chocolate: execute only the item, count and page-info queries requested by the client.</Description>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <RepositoryType>git</RepositoryType>
+    <RepositoryUrl>https://github.com/gtg-open/selection-aware-paging</RepositoryUrl>
+    <PackageProjectUrl>https://github.com/gtg-open/selection-aware-paging</PackageProjectUrl>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="HotChocolate.Types.OffsetPagination" Version="$(HotChocolateDependencyRange)" />
+    <None Include="../../THIRD_PARTY_NOTICES.md" Pack="true" PackagePath="/" />
+    <None Include="../../LICENSE" Pack="true" PackagePath="/" />
+    <None Include="../../README.md" Pack="true" PackagePath="/" />
+  </ItemGroup>
+</Project>

@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>GtG.Open.HC.SelectionAwarePaging.PackageConsumer</RootNamespace>
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="GtG.Open.HC.SelectionAwarePaging" Version="[$(Version)]" />
+    <PackageReference Include="HotChocolate.AspNetCore" Version="[$(HotChocolateTestVersion)]" />
+    <PackageReference Include="HotChocolate.Types.OffsetPagination" Version="[$(HotChocolateTestVersion)]" />
+  </ItemGroup>
+</Project>

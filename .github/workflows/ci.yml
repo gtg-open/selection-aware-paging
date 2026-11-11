@@ -1,0 +1,46 @@
+name: CI
+on:
+  push:
+  pull_request:
+  workflow_call:
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Verify privacy scanner and source history
+        run: |
+          python3 -B -m unittest discover -s tools/privacy -p 'test_*.py'
+          python3 -B tools/privacy/check.py --worktree --metadata --history
+      - uses: actions/setup-dotnet@v4
+        with:
+          global-json-file: global.json
+          dotnet-version: |
+            8.0.x
+            9.0.x
+            10.0.x
+      - name: PostgreSQL, GraphQL and HTTP compatibility matrix
+        run: tools/test.sh
+      - name: Pack
+        run: python3 tools/run-sanitized.py dotnet pack src/GtG.Open.HC.SelectionAwarePaging -c Release -o artifacts/packages
+      - name: Inspect package
+        run: python3 tools/check-package.py
+      - name: Verify package consumer compatibility matrix
+        run: python3 tools/check-consumer.py
+      - name: Inspect publication artifacts and symbols
+        run: >-
+          python3 -B tools/privacy/check.py --metadata --github-hosted
+          --output artifacts/packages
+          --output src/GtG.Open.HC.SelectionAwarePaging/bin/Release/net8.0/GtG.Open.HC.SelectionAwarePaging.pdb
+          --output src/GtG.Open.HC.SelectionAwarePaging/bin/Release/net9.0/GtG.Open.HC.SelectionAwarePaging.pdb
+          --output src/GtG.Open.HC.SelectionAwarePaging/bin/Release/net10.0/GtG.Open.HC.SelectionAwarePaging.pdb
+          --output src/GtG.Open.HC.SelectionAwarePaging/bin/Release/net11.0/GtG.Open.HC.SelectionAwarePaging.pdb
+      - uses: actions/upload-artifact@v4
+        with:
+          name: package
+          path: artifacts/packages/*.nupkg

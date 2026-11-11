@@ -1,0 +1,22 @@
+<Project>
+  <PropertyGroup>
+    <TargetFrameworks>net8.0;net9.0;net10.0;net11.0</TargetFrameworks>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <LangVersion>13</LangVersion>
+    <Deterministic>true</Deterministic>
+    <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
+    <EnableSourceLink>false</EnableSourceLink>
+    <DeterministicSourcePaths>true</DeterministicSourcePaths>
+    <IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
+    <Authors>GtG Open Maintainers</Authors>
+    <Version>16.6.0</Version>
+    <HotChocolateMinimumVersion>16.6.0</HotChocolateMinimumVersion>
+    <HotChocolateDependencyRange>[$(HotChocolateMinimumVersion),17.0.0)</HotChocolateDependencyRange>
+    <HotChocolateCompatibilityVersions>16.6.0;16.7.5</HotChocolateCompatibilityVersions>
+    <HotChocolateTestVersion Condition="'$(HotChocolateTestVersion)' == ''">$(HotChocolateMinimumVersion)</HotChocolateTestVersion>
+  </PropertyGroup>
+  <ItemGroup>
+    <SourceRoot Include="$(MSBuildThisFileDirectory)" SourceControl="git" />
+  </ItemGroup>
+</Project>

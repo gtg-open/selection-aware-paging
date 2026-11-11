@@ -1,0 +1,63 @@
+name: Publish NuGet package
+on:
+  workflow_dispatch:
+    inputs:
+      publish:
+        description: Publish the verified package to NuGet.org (otherwise verify only)
+        required: true
+        type: boolean
+        default: false
+permissions:
+  contents: read
+concurrency:
+  group: nuget-release
+  cancel-in-progress: false
+jobs:
+  verify:
+    uses: ./.github/workflows/ci.yml
+  publish:
+    if: inputs.publish
+    needs: verify
+    runs-on: ubuntu-latest
+    environment: release
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/download-artifact@v4
+        with:
+          name: package
+          path: artifacts/packages
+      - uses: actions/setup-dotnet@v4
+        with:
+          global-json-file: global.json
+      - name: Verify publication inputs
+        env:
+          NUGET_USER: ${{ vars.NUGET_USER }}
+        run: |
+          test "$GITHUB_REF" = refs/heads/main
+          test -n "$NUGET_USER"
+          python3 -B tools/privacy/check.py --metadata --history --github-hosted --output artifacts/packages
+          python3 - <<'PY'
+          from pathlib import Path
+          import os, re, xml.etree.ElementTree as ET
+          version = ET.parse('Directory.Build.props').findtext('.//Version')
+          assert re.fullmatch(r'\d+\.\d+\.\d+', version), 'Expected a stable package version'
+          package = Path('artifacts/packages') / f'GtG.Open.HC.SelectionAwarePaging.{version}.nupkg'
+          assert list(Path('artifacts/packages').glob('*.nupkg')) == [package], 'Unexpected package set'
+          with open(os.environ['GITHUB_ENV'], 'a') as output:
+              output.write(f'RELEASE_PACKAGE={package.as_posix()}\n')
+          PY
+      - name: Request a short-lived NuGet publishing key
+        id: nuget-login
+        uses: NuGet/login@8d196754b4036150537f80ac539e15c2f1028841 # v1.2.0
+        with:
+          user: ${{ vars.NUGET_USER }}
+      - name: Publish the verified package
+        env:
+          NUGET_API_KEY: ${{ steps.nuget-login.outputs.NUGET_API_KEY }}
+        run: python3 tools/run-sanitized.py dotnet nuget push "$RELEASE_PACKAGE" --source https://api.nuget.org/v3/index.json

@@ -1,0 +1,13 @@
+<RunSettings>
+  <DataCollectionRunSettings>
+    <DataCollectors>
+      <DataCollector friendlyName="XPlat Code Coverage">
+        <Configuration>
+          <Include>[GtG.Open.HC.SelectionAwarePaging]*</Include>
+          <DeterministicReport>true</DeterministicReport>
+          <DoesNotReturnAttribute>System.Diagnostics.CodeAnalysis.DoesNotReturnAttribute</DoesNotReturnAttribute>
+        </Configuration>
+      </DataCollector>
+    </DataCollectors>
+  </DataCollectionRunSettings>
+</RunSettings>
