@@ -1,7 +1,9 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <PackageId>GtG.Open.HC.SelectionAwarePaging</PackageId>
-    <Description>Selection-aware offset paging for Hot Chocolate: execute only the item, count and page-info queries requested by the client.</Description>
+    <Title>Selection-aware offset paging for Hot Chocolate</Title>
+    <Description>Selection-aware offset paging (offset pagination) for Hot Chocolate (HotChocolate), the .NET GraphQL server. Avoid fetching and materializing page rows for totalCount-only queries on UseOffsetPaging fields. Execute only the item, count and page-info queries selected by the client while preserving the existing GraphQL schema.</Description>
+    <PackageTags>hotchocolate;graphql;dotnet;csharp;pagination;offset-pagination;paging;UseOffsetPaging;totalCount;performance</PackageTags>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <RepositoryType>git</RepositoryType>

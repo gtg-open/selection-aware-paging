@@ -1,11 +1,17 @@
-# GtG.Open.HC.SelectionAwarePaging
+# Selection-aware offset paging for Hot Chocolate
 
 **Avoid loading page rows when your GraphQL client only asks for a count.**
 
-An offset-paging extension for Hot Chocolate that makes database execution follow
-the fields selected by the client: `items`, `totalCount` and `pageInfo`. It skips
-unnecessary row fetching, object allocation and next-page lookahead while keeping
-the existing GraphQL schema and paging arguments.
+`GtG.Open.HC.SelectionAwarePaging` is an independent offset pagination extension
+for **Hot Chocolate (`HotChocolate`)**, the .NET GraphQL server. It makes database
+execution follow the fields selected by the client: `items`, `totalCount` and
+`pageInfo`. It skips unnecessary row fetching, object allocation and next-page
+lookahead while keeping the existing GraphQL schema and `[UseOffsetPaging]`
+arguments.
+
+[NuGet package](https://www.nuget.org/packages/GtG.Open.HC.SelectionAwarePaging)
+| [Installation and registration](#using-the-library)
+| [Compatibility and verification](docs/verification.md)
 
 ## Why this library exists
 
@@ -30,7 +36,7 @@ selection and runs only the item, count or existence queries needed to answer it
 Existing paginated fields can serve both full pages and lightweight metadata
 requests, without adding dedicated count-only resolvers to every API.
 
-### Example: a counter that accidentally loads a page
+### Why does a totalCount-only query still load rows with UseOffsetPaging?
 
 Consider a `products` field backed by an ordered database query:
 
